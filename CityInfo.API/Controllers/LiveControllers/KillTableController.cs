@@ -1,15 +1,18 @@
 ﻿
 using CityInfo.API.Models.BusinessObjects.DerivBO;
 using CityInfo.API.Services.DatabaseServ;
+using CityInfo.API.Services.Functions;
 using CityInfo.API.Services.KillPage;
 using CityInfo.API.Services.KillPage.ScoreBoard;
 using CityInfo.API.ViewModels.BasicStatsPageModels.ScoreBoardModels;
 using CSGSI_FrontEnd.FrontEndServices.KillPageServ;
+using CSGSI_FrontEnd.Models;
 using CSGSI_FrontEnd.ViewModels.EconomyRoundsDetailsModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace CityInfo.API.Controllers
 {
@@ -67,18 +70,20 @@ namespace CityInfo.API.Controllers
             return Ok(counterExpansionServ.counterExpansionModel);
         }
         
-        [HttpPost("economytable")]
+        [HttpPost("economytable/{FH}/{SH}/{FT}/{ot}")]
         public ActionResult MatchSegmentsCountersTable(string FH, string SH, string FT, string ot)
         {
             int totalRoundCount = serverDataBase.GetTotalRoundCount();
             CounterServ counterServ = new CounterServ(FH, SH, FT, ot, totalRoundCount);
             //CounterServ counterServ = new CounterServ();
-            //counterServ.SetFullTimeCounterTable(serverDataBase);
+            counterServ.SetFullTimeCounterTable(serverDataBase);
             counterServ.MergeModels(serverDataBase);
 
             return Ok(JsonConvert.SerializeObject(counterServ.economyTableModel));
         }
-        public IActionResult EconomyRoundsDetails()
+
+        [HttpGet("economyround")]
+        public ActionResult EconomyRoundsDetails()
         {
             ServerDataBase serverDataBase = new ServerDataBase(mongoDatabase);
             var collection = serverDataBase.GetRoundEconomyStateCollection();
@@ -87,6 +92,21 @@ namespace CityInfo.API.Controllers
 
             EconomyRoundModel economyRoundModel = new EconomyRoundModel(amazing, DerivPlayer);
             return Ok(amazing);
+        }
+        public ActionResult TimerFunction(float timestamp, string Phase, int Round)
+        {
+            TimerFunction timerFunction = new TimerFunction();
+            return Ok(timerFunction.CheckTimerFunction(timestamp, Phase, Round, serverDataBase));
+        }
+        public ActionResult Privacy()
+        {
+            return Ok();
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public ActionResult Error()
+        {
+            return Ok(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
