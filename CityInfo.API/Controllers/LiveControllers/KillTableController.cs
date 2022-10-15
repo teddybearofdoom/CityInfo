@@ -5,6 +5,7 @@ using CityInfo.API.Services.Functions;
 using CityInfo.API.Services.KillPage;
 using CityInfo.API.Services.KillPage.ScoreBoard;
 using CityInfo.API.ViewModels.BasicStatsPageModels.ScoreBoardModels;
+using CityInfo.API.ViewModels.EconomyModels;
 using CSGSI_FrontEnd.FrontEndServices.KillPageServ;
 using CSGSI_FrontEnd.Models;
 using CSGSI_FrontEnd.ViewModels.EconomyRoundsDetailsModels;
@@ -69,8 +70,15 @@ namespace CityInfo.API.Controllers
             counterExpansionServ.CheckFiltersCounterExpansionTable(serverDataBase);
             return Ok(counterExpansionServ.counterExpansionModel);
         }
-        
-        [HttpPost("economytable/{FH}/{SH}/{FT}/{ot}")]
+        [HttpPost("/economy")]
+        public ActionResult economy()
+        {
+            EconomyTableServ economyTableServ = new EconomyTableServ();
+            economyTableServ.SetEcononmyTable(serverDataBase);
+
+            return Ok(JsonConvert.SerializeObject(economyTableServ.economyTable));
+        }
+        [HttpPost("/economytable/{FH}/{SH}/{FT}/{ot}")]
         public ActionResult MatchSegmentsCountersTable(string FH, string SH, string FT, string ot)
         {
             int totalRoundCount = serverDataBase.GetTotalRoundCount();
@@ -81,8 +89,9 @@ namespace CityInfo.API.Controllers
 
             return Ok(JsonConvert.SerializeObject(counterServ.economyTableModel));
         }
+        
 
-        [HttpGet("economyround")]
+       [HttpGet("economyround")]
         public ActionResult EconomyRoundsDetails()
         {
             ServerDataBase serverDataBase = new ServerDataBase(mongoDatabase);
