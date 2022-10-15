@@ -1,5 +1,5 @@
-﻿using CSGSI_FrontEnd.Filters.KillPageFilters;
-using CSGSI_FrontEnd.FrontEndServices.DataBaseServ;
+﻿using CityInfo.API.Filters;
+using CityInfo.API.Services.DatabaseServ;
 using CSGSI_FrontEnd.ViewModels.Engagment_Models;
 
 namespace CSGSI_FrontEnd.FrontEndServices.EngagmentServ
