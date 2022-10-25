@@ -27,6 +27,13 @@ namespace CSGSI_FrontEnd.FrontEndServices.KillPageServ
             indexFilters = new IndexFilters();
             firstResponseKillServ = new FirstResponseKillServ();
         }
+        public CounterExpansionServ(int totalRound)
+        {
+            counterExpansionModel = new CounterExpansionModel();
+            indexFilters = new IndexFilters();
+            firstResponseKillServ = new FirstResponseKillServ();
+            this.totalRound =totalRound;
+        }
         public CounterExpansionServ()
         {
             counterExpansionModel = new CounterExpansionModel();
@@ -69,6 +76,10 @@ namespace CSGSI_FrontEnd.FrontEndServices.KillPageServ
             else if (OT == "on")
             {
                 SetOTCounterExpansionTable(serverDataBase);
+            }
+            else
+            {
+                SetFullTimeCounterExpansionTable(serverDataBase);
             }
         }
         public void SetFirstHalfCounterExpansionTable(ServerDataBase serverDataBase)

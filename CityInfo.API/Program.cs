@@ -1,5 +1,5 @@
 using CityInfo.API;
-using CityInfo.API.DbContexts;
+
 using CityInfo.API.Services;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
@@ -45,7 +45,7 @@ builder.Host.UseSerilog();
 
 //returnhttpnotacceptable when accept header doesn't match request requested 
 builder.Services.AddControllers(options => 
-options.ReturnHttpNotAcceptable = true).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();
+options.ReturnHttpNotAcceptable = true).AddNewtonsoftJson();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -57,16 +57,9 @@ builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
 //Scoped - created once per request
 //Singleton - created first time they requested every subsequent request uses this instance
 
-#if DEBUG
-builder.Services.AddTransient<IMailService, LocalMailService>();
-#else
-builder.Services.AddTransient<IMailService, CloudMailService>();
-#endif
+
 
 builder.Services.AddSingleton<CitiesDataStore>();
-
-builder.Services.AddDbContext<CityInfoContext>(
-    dbContextOptions => dbContextOptions.UseSqlite(builder.Configuration["ConnectionStrings:CityInfoDBConnectionString"]));
 
 var app = builder.Build();
 

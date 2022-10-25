@@ -18,16 +18,9 @@ namespace CityInfo.API.Controllers
         //After implementing interface on our mail service and telling
         //our service provide to implement the interface instead of 
         ///concreate class
-        private readonly IMailService _mailService;
         private readonly CitiesDataStore _citiesDataStore;
 
-        public PointsOfInterstController(ILogger<PointsOfInterstController> logger, IMailService mailService, CitiesDataStore citiesDataStore)
-        {
-            _citiesDataStore = citiesDataStore ?? throw new ArgumentNullException(nameof(citiesDataStore));
 
-            _mailService = mailService ?? throw new ArgumentNullException(nameof(mailService)); 
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        }
 
         [HttpGet]
         public ActionResult<IEnumerable<PointOfInterestDto>> GetPointsOfInterest(int cityId)
@@ -215,11 +208,6 @@ namespace CityInfo.API.Controllers
             {
                 return NotFound();
             }
-
-            city.PointOfInterests.Remove(pointOfInterestFromStore);
-            _mailService.Send(
-                "Point of interest deleted. ",
-                $"Point of interest {pointOfInterestFromStore.Name} with id {pointOfInterestFromStore.Id} was deleted.");
             return NoContent();
         }
     }

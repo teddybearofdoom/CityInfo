@@ -1,14 +1,17 @@
 ﻿
 using CityInfo.API.Models.BusinessObjects.DerivBO;
+using CityInfo.API.Models.FilterModels;
 using CityInfo.API.Services.DatabaseServ;
 using CityInfo.API.Services.Functions;
 using CityInfo.API.Services.KillPage;
 using CityInfo.API.Services.KillPage.ScoreBoard;
 using CityInfo.API.ViewModels.BasicStatsPageModels.ScoreBoardModels;
 using CityInfo.API.ViewModels.EconomyModels;
+using CSGSI_FrontEnd.FrontEndServices.EngagmentServ;
 using CSGSI_FrontEnd.FrontEndServices.KillPageServ;
 using CSGSI_FrontEnd.Models;
 using CSGSI_FrontEnd.ViewModels.EconomyRoundsDetailsModels;
+using CSGSI_FrontEnd.ViewModels.Engagment_Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
@@ -17,7 +20,7 @@ using System.Diagnostics;
 
 namespace CityInfo.API.Controllers
 {
-    [Route("api/killtable/")]
+    [Route("api/livetables/")]
     [ApiController]
     public class KillTableController : ControllerBase
     {
@@ -42,35 +45,31 @@ namespace CityInfo.API.Controllers
             return Ok("is working");
         }
 
-        [HttpPost("test")]
-        public ActionResult postKillTable(string FirstHalf, string SecondHalf, string FullTime, string OT, string FB, string HB, string Eco, string GunRound, string PartialGunRound, string GRAWP, string total, int RoundX, int RoundY, float timestamp, string Phase, int Round)
+        //[HttpPost("killTable")]
+        //public ActionResult postKillTable(string FirstHalf, string SecondHalf, string FullTime, string OT, string FB, string HB, string Eco, string GunRound, string PartialGunRound, string GRAWP, string total, int RoundX, int RoundY, float timestamp, string Phase, int Round)
+        //{
+        //    List<Deriv_PlayerTeam_BO> ListofRounds = new List<Deriv_PlayerTeam_BO>();
+
+        //    ScoreBoardServ scoreBoardServ = new ScoreBoardServ();
+
+        //    KillTableModel killTableModel = scoreBoardServ.CheckScoreBoardFilters(FirstHalf, SecondHalf, FullTime, OT, FB, HB, Eco, GunRound, PartialGunRound, GRAWP, total, RoundX, RoundY, timestamp, Phase, Round, serverDataBase);
+
+
+        //    return Ok(JsonConvert.SerializeObject(killTableModel));
+        //}
+        [HttpPost("killTable")]
+        public ActionResult postKillTable()/*string FirstHalf, string SecondHalf, string FullTime, string OT, string FB, string HB, string Eco, string GunRound, string PartialGunRound, string GRAWP, string total, int RoundX, int RoundY, float timestamp, string Phase, int Round)*/
         {
-            List<Deriv_PlayerTeam_BO> ListofRounds = new List<Deriv_PlayerTeam_BO>();
 
             ScoreBoardServ scoreBoardServ = new ScoreBoardServ();
 
-            KillTableModel killTableModel = scoreBoardServ.CheckScoreBoardFilters(FirstHalf, SecondHalf, FullTime, OT, FB, HB, Eco, GunRound, PartialGunRound, GRAWP, total, RoundX, RoundY, timestamp, Phase, Round, serverDataBase);
+            KillTableModel killTableModel = scoreBoardServ.CheckScoreBoardFilters(serverDataBase);
 
-            CounterServ counterServ = new CounterServ();
-            counterServ.SetFullTimeCounterTable(serverDataBase);
+            //KillTableModel killTableModel = scoreBoardServ.CheckScoreBoardFilters(FirstHalf, SecondHalf, FullTime, OT, FB, HB, Eco, GunRound, PartialGunRound, GRAWP, total, RoundX, RoundY, timestamp, Phase, Round, serverDataBase);
 
-            CounterExpansionServ counterExpansionServ = new CounterExpansionServ();
-            counterExpansionServ.SetFullTimeCounterExpansionTable(serverDataBase);
-
-            MergeKillPageModels mergeKillPageModels = new MergeKillPageModels();
-
-            return Ok(JsonConvert.SerializeObject(mergeKillPageModels.MergeBasicPageModels(killTableModel, counterServ.economyTableModel, counterServ.uniqueKillStatsModel, counterExpansionServ.counterExpansionModel)));
+            return Ok(JsonConvert.SerializeObject(killTableModel));
         }
-
-        [HttpGet("/counterexpansion")]
-        public ActionResult CounterExpansionTable(string FirstHalf, string SecondHalf, string FullTime, string OT)
-        {
-            int totalRound = serverDataBase.GetTotalRoundCount();
-            CounterExpansionServ counterExpansionServ = new CounterExpansionServ(FirstHalf, SecondHalf, FullTime, OT, totalRound);
-            counterExpansionServ.CheckFiltersCounterExpansionTable(serverDataBase);
-            return Ok(counterExpansionServ.counterExpansionModel);
-        }
-        [HttpPost("/economy")]
+        [HttpPost("economy")]
         public ActionResult economy()
         {
             EconomyTableServ economyTableServ = new EconomyTableServ();
@@ -78,6 +77,59 @@ namespace CityInfo.API.Controllers
 
             return Ok(JsonConvert.SerializeObject(economyTableServ.economyTable));
         }
+
+        [HttpPost("counterexpansion")]
+        public ActionResult CounterExpansionTable()
+        {
+            int totalRound = serverDataBase.GetTotalRoundCount();
+            CounterExpansionServ counterExpansionServ = new CounterExpansionServ(totalRound);
+            counterExpansionServ.CheckFiltersCounterExpansionTable(serverDataBase);
+            return Ok(JsonConvert.SerializeObject((counterExpansionServ.counterExpansionModel)));
+        }
+        [HttpPost("engagement")]
+        public ActionResult engagementPage()
+        {
+            CalcEngagmentServ calcEngagmentServ = new CalcEngagmentServ();
+            calcEngagmentServ.Engagment(serverDataBase);
+            List<Engagement> engagementList = new List<Engagement>();
+            engagementList.Add(calcEngagmentServ.engagementCT);
+            engagementList.Add(calcEngagmentServ.engagementT);
+
+            return Ok(JsonConvert.SerializeObject(engagementList));
+        }[HttpPost("engagementDetailed")]
+        public ActionResult engagementDetailedTable()
+        {
+            DetailedEngagement detailedEngagement = new DetailedEngagement();
+            detailedEngagement.Engagment(serverDataBase);
+
+            return Ok(JsonConvert.SerializeObject(engagementList));
+        }
+        //[HttpPost("test")]
+        //public ActionResult getTableFilters([FromBody] KillTableFilters killTableFilters)
+        //{
+        //    List<Deriv_PlayerTeam_BO> ListofRounds = new List<Deriv_PlayerTeam_BO>();
+
+        //    ScoreBoardServ scoreBoardServ = new ScoreBoardServ();
+
+        //    KillTableModel killTableModel = scoreBoardServ.CheckScoreBoardFilters(killTableFilters.FirstHalf, killTableFilters.SecondHalf,
+        //        killTableFilters.FullTime, killTableFilters.OT, killTableFilters.FB, killTableFilters.HB, killTableFilters.Eco,
+        //        killTableFilters.GunRound, killTableFilters.PartialGunRound, killTableFilters.GRAWP, killTableFilters.total,
+        //        killTableFilters.RoundX, killTableFilters.RoundY, killTableFilters.timestamp, killTableFilters.Phase, killTableFilters.Round,
+        //        serverDataBase);
+
+        //    return Ok(killTableFilters.GunRound);
+        //    return Ok(JsonConvert.SerializeObject(killTableModel));
+        //}
+
+        //[HttpGet("/counterexpansion")]
+        //public ActionResult CounterExpansionTable(string FirstHalf, string SecondHalf, string FullTime, string OT)
+        //{
+        //    int totalRound = serverDataBase.GetTotalRoundCount();
+        //    CounterExpansionServ counterExpansionServ = new CounterExpansionServ(FirstHalf, SecondHalf, FullTime, OT, totalRound);
+        //    counterExpansionServ.CheckFiltersCounterExpansionTable(serverDataBase);
+        //    return Ok(counterExpansionServ.counterExpansionModel);
+        //}
+
         [HttpPost("/economytable/{FH}/{SH}/{FT}/{ot}")]
         public ActionResult MatchSegmentsCountersTable(string FH, string SH, string FT, string ot)
         {

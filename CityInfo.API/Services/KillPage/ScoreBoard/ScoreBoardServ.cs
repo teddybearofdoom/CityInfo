@@ -26,6 +26,12 @@ namespace CityInfo.API.Services.KillPage.ScoreBoard
             killTableModel = new KillTableModel();
             populateScoreBoardTableServ = new PopulateScoreBoardServ();
         }
+        public KillTableModel CheckScoreBoardFilters(ServerDataBase serverDataBase)
+        {
+            totalRoundCount = serverDataBase.GetTotalRoundCount();
+            FullTimeScoreBoardServ fullTimeScoreBoard = new FullTimeScoreBoardServ(totalRoundCount);
+            return fullTimeScoreBoard.SetFullTimeScoreBoard(serverDataBase);       
+        }
         public KillTableModel CheckScoreBoardFilters(string FirstHalf, string SecondHalf, string FullTime, string OT, string FB, string HB, string Eco, string GunRound, string PartialGunRound, string GRAWP, string total, int RoundX, int RoundY, float timestamp, string Phase, int Round, ServerDataBase serverDataBase)
         {
             totalRoundCount = serverDataBase.GetTotalRoundCount();
