@@ -17,7 +17,7 @@ using System.Diagnostics;
 
 namespace CityInfo.API.Controllers
 {
-    [Route("api/killtable/")]
+    [Route("api/livetables/")]
     [ApiController]
     public class KillTableController : ControllerBase
     {
@@ -35,15 +35,21 @@ namespace CityInfo.API.Controllers
 
             serverDataBase = new ServerDataBase(mongoDatabase);
         }
-
         [HttpGet("hit")]
         public ActionResult test()
         {
             return Ok("is working");
         }
-
-        [HttpPost("test")]
+        [HttpGet("killTable/{FirstHalf}/{SecondHalf}/{FullTime}/{OT}/{FB}/{HB}/{Eco}/{GunRound}/{PartialGunRound}/{GRAWP}/{total}/{RoundX}/{RoundY}/{timestamp}/{Phase}/{Round}")]
         public ActionResult postKillTable(string FirstHalf, string SecondHalf, string FullTime, string OT, string FB, string HB, string Eco, string GunRound, string PartialGunRound, string GRAWP, string total, int RoundX, int RoundY, float timestamp, string Phase, int Round)
+        {
+            ScoreBoardServ scoreBoardServ = new ScoreBoardServ();
+
+            KillTableModel killTableModel = scoreBoardServ.CheckScoreBoardFilters(FirstHalf, SecondHalf, FullTime, OT, FB, HB, Eco, GunRound, PartialGunRound, GRAWP, total, RoundX, RoundY, timestamp, Phase, Round, serverDataBase);
+            return Ok(JsonConvert.SerializeObject(killTableModel));
+        }
+        [HttpGet("homepage/{FH}/{SH}/{FT}/{ot}")]
+        public ActionResult postKillTable2(string FirstHalf, string SecondHalf, string FullTime, string OT, string FB, string HB, string Eco, string GunRound, string PartialGunRound, string GRAWP, string total, int RoundX, int RoundY, float timestamp, string Phase, int Round)
         {
             List<Deriv_PlayerTeam_BO> ListofRounds = new List<Deriv_PlayerTeam_BO>();
 
@@ -70,7 +76,7 @@ namespace CityInfo.API.Controllers
             counterExpansionServ.CheckFiltersCounterExpansionTable(serverDataBase);
             return Ok(counterExpansionServ.counterExpansionModel);
         }
-        [HttpPost("/economy")]
+        [HttpGet("/economy")]
         public ActionResult economy()
         {
             EconomyTableServ economyTableServ = new EconomyTableServ();
@@ -89,9 +95,8 @@ namespace CityInfo.API.Controllers
 
             return Ok(JsonConvert.SerializeObject(counterServ.economyTableModel));
         }
-        
 
-       [HttpGet("economyround")]
+        [HttpGet("economyround")]
         public ActionResult EconomyRoundsDetails()
         {
             ServerDataBase serverDataBase = new ServerDataBase(mongoDatabase);

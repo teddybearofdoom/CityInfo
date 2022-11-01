@@ -16,6 +16,10 @@ namespace CityInfo.API.ViewModels.EconomyModels
             IndexFilters indexFilters = new IndexFilters();
             for (int i = 0; i < serverDataBase.GetTotalRoundCount(); i++)
             {
+                if (i==0)
+                {
+                    IntializeEconomyTypeModel();
+                }
                 if (i == 15)
                 {
                     SwitcheconomyTableValues();
@@ -35,6 +39,33 @@ namespace CityInfo.API.ViewModels.EconomyModels
             var document = serverDataBase.GetPlayerTeamDerivObj(serverDataBase.GetTotalRoundCount() - 1);
             economyTable.teamCT.teamName = document.CTplayers[0].Clan;
             economyTable.teamT.teamName = document.Tplayers[0].Clan;
+        }
+        public void IntializeEconomyTypeModel()
+        {
+            economyTable.teamCT.ecoRoundEconomy.typeName = "Eco";
+            economyTable.teamT.ecoRoundEconomy.typeName = "Eco";
+
+            economyTable.teamCT.halfbuyRoundEconomy.typeName = "Half Buy";
+            economyTable.teamT.halfbuyRoundEconomy.typeName = "Half Buy";
+
+            economyTable.teamCT.forcebuyRoundEconomy.typeName = "Force Buy";
+            economyTable.teamT.forcebuyRoundEconomy.typeName = "Force Buy";
+
+            economyTable.teamCT.fullbuyRoundEconomy.typeName = "Full Buy";
+            economyTable.teamT.fullbuyRoundEconomy.typeName = "Full Buy";
+
+            economyTable.teamCT.partialfullbuyRoundEconomy.typeName = "Partial Full Buy";
+            economyTable.teamT.partialfullbuyRoundEconomy.typeName = "Partial Full Buy";
+
+            economyTable.teamCT.pistolRoundEconomy.typeName = "Pistol Round";
+            economyTable.teamT.pistolRoundEconomy.typeName = "Pistol Round";
+
+            economyTable.teamCT.postPistolRoundEconomy.typeName = "Post Pistol Round";
+            economyTable.teamT.postPistolRoundEconomy.typeName = "Post Pistol Round";
+
+            economyTable.teamCT.breakRoundEconomy.typeName = "Break Round";
+            economyTable.teamT.breakRoundEconomy.typeName = "Break Round";
+
         }
         public void PopulateeconomyTable(Deriv_RoundEconomyState_BO deriv_RoundEconomyState_BO, Deriv_RoundCond_BO deriv_RoundCond_BO)
         {
