@@ -2,6 +2,8 @@
 {
     public class UniqueKillStatsModel
     {
+        public string teamCT { get; set; }
+        public string teamT { get; set; }
         public TeamUniqueKillStats unTradedOpeners { get;set;}
         public TeamUniqueKillStats tradedOpeners { get;set;}
         public TeamUniqueKillStats firstResponseKill { get;set;}    

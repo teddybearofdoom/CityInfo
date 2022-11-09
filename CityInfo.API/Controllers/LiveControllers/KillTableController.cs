@@ -6,9 +6,11 @@ using CityInfo.API.Services.KillPage;
 using CityInfo.API.Services.KillPage.ScoreBoard;
 using CityInfo.API.ViewModels.BasicStatsPageModels.ScoreBoardModels;
 using CityInfo.API.ViewModels.EconomyModels;
+using CSGSI_FrontEnd.FrontEndServices.EngagmentServ;
 using CSGSI_FrontEnd.FrontEndServices.KillPageServ;
 using CSGSI_FrontEnd.Models;
 using CSGSI_FrontEnd.ViewModels.EconomyRoundsDetailsModels;
+using CSGSI_FrontEnd.ViewModels.Engagment_Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
@@ -68,21 +70,70 @@ namespace CityInfo.API.Controllers
             return Ok(JsonConvert.SerializeObject(mergeKillPageModels.MergeBasicPageModels(killTableModel, counterServ.economyTableModel, counterServ.uniqueKillStatsModel, counterExpansionServ.counterExpansionModel)));
         }
 
-        [HttpGet("/counterexpansion")]
-        public ActionResult CounterExpansionTable(string FirstHalf, string SecondHalf, string FullTime, string OT)
+        [HttpPost("/counterexpansion")]
+        public ActionResult CounterExpansionTable()
         {
+            string FirstHalf = null;
+            string SecondHalf = null;
+            string FullTime = null;
+            string OT = null;
             int totalRound = serverDataBase.GetTotalRoundCount();
             CounterExpansionServ counterExpansionServ = new CounterExpansionServ(FirstHalf, SecondHalf, FullTime, OT, totalRound);
             counterExpansionServ.CheckFiltersCounterExpansionTable(serverDataBase);
-            return Ok(counterExpansionServ.counterExpansionModel);
+            return Ok(JsonConvert.SerializeObject(counterExpansionServ.counterExpansionModel));
         }
-        [HttpGet("/economy")]
+        [HttpPost("/killcountertable")]
+        public ActionResult KillCounterTable()
+        {
+            CounterServ counterServ = new CounterServ();
+            counterServ.SetFullTimeCounterTable(serverDataBase);
+            counterServ.uniqueKillStatsModel.teamCT = "Astralis";
+            counterServ.uniqueKillStatsModel.teamT = "BIG";
+            return Ok(counterServ.uniqueKillStatsModel);
+        }
+        [HttpPost("/economy")]
         public ActionResult economy()
         {
             EconomyTableServ economyTableServ = new EconomyTableServ();
             economyTableServ.SetEcononmyTable(serverDataBase);
 
             return Ok(JsonConvert.SerializeObject(economyTableServ.economyTable));
+        }
+        [HttpPost("/killtable")]
+        public ActionResult KillTable()
+        {
+            string FirstHalf = null;
+            string SecondHalf = null;
+            string FullTime = "on";
+            string OT = null;
+            string FB = null; string HB = null;
+            string Eco = null;
+            string GunRound = null;
+            string PartialGunRound = null; 
+            string GRAWP = null;
+            string total = null;
+            int RoundX = 0;
+            int RoundY = 0;
+            float timestamp = 0;
+            string Phase = null;
+            int Round = 0;
+            ScoreBoardServ scoreBoardServ = new ScoreBoardServ();
+            
+            KillTableModel killTableModel = scoreBoardServ.CheckScoreBoardFilters(FirstHalf, SecondHalf, FullTime, OT, FB, HB, Eco, GunRound, PartialGunRound, GRAWP, total, RoundX, RoundY, timestamp, Phase, Round, serverDataBase);
+            killTableModel.teamCTname = killTableModel.team_CT[0].Clan;
+            killTableModel.teamTname = killTableModel.team_T[0].Clan;
+            return Ok(JsonConvert.SerializeObject(killTableModel));
+        }
+        [HttpPost("/engagementtable")]
+        public ActionResult engagementtable()
+        {
+            CalcEngagmentServ calcEngagmentServ = new CalcEngagmentServ();
+            calcEngagmentServ.Engagment(serverDataBase);
+            List<Engagement> engagementList = new List<Engagement>();
+            engagementList.Add(calcEngagmentServ.engagementCT);
+            engagementList.Add(calcEngagmentServ.engagementT);
+
+            return Ok(JsonConvert.SerializeObject(engagementList));
         }
         [HttpPost("/economytable/{FH}/{SH}/{FT}/{ot}")]
         public ActionResult MatchSegmentsCountersTable(string FH, string SH, string FT, string ot)

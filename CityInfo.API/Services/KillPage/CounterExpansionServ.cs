@@ -70,6 +70,10 @@ namespace CSGSI_FrontEnd.FrontEndServices.KillPageServ
             {
                 SetOTCounterExpansionTable(serverDataBase);
             }
+            else
+            {
+                SetFullTimeCounterExpansionTable(serverDataBase);
+            }
         }
         public void SetFirstHalfCounterExpansionTable(ServerDataBase serverDataBase)
         {

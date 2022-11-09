@@ -50,6 +50,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
 
+builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
+{
+    builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+}));
+
 //to inject custom service we need to configure them
 //we can also specify the lifetime of our service
 //Transient - it would be created each time they are requested (best for lightweight stateless services)
@@ -61,6 +66,7 @@ builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
 builder.Services.AddTransient<IMailService, CloudMailService>();
 #endif
 
+
 builder.Services.AddSingleton<CitiesDataStore>();
 
 var app = builder.Build();
@@ -71,6 +77,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("corsapp");
 
 app.UseHttpsRedirection();
 
