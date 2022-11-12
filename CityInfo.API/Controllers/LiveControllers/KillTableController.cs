@@ -33,7 +33,7 @@ namespace CityInfo.API.Controllers
             //_logger = logger;
 
             mongoClient = new MongoClient("mongodb://127.0.0.1:27017");
-            mongoDatabase = mongoClient.GetDatabase("CSGSI-Nodes");
+            mongoDatabase = mongoClient.GetDatabase("Astralis-vs-BIG-m1-dust");
 
             serverDataBase = new ServerDataBase(mongoDatabase);
         }
@@ -69,7 +69,6 @@ namespace CityInfo.API.Controllers
 
             return Ok(JsonConvert.SerializeObject(mergeKillPageModels.MergeBasicPageModels(killTableModel, counterServ.economyTableModel, counterServ.uniqueKillStatsModel, counterExpansionServ.counterExpansionModel)));
         }
-
         [HttpPost("/counterexpansion")]
         public ActionResult CounterExpansionTable()
         {
@@ -109,7 +108,7 @@ namespace CityInfo.API.Controllers
             string FB = null; string HB = null;
             string Eco = null;
             string GunRound = null;
-            string PartialGunRound = null; 
+            string PartialGunRound = null;
             string GRAWP = null;
             string total = null;
             int RoundX = 0;
@@ -118,7 +117,7 @@ namespace CityInfo.API.Controllers
             string Phase = null;
             int Round = 0;
             ScoreBoardServ scoreBoardServ = new ScoreBoardServ();
-            
+
             KillTableModel killTableModel = scoreBoardServ.CheckScoreBoardFilters(FirstHalf, SecondHalf, FullTime, OT, FB, HB, Eco, GunRound, PartialGunRound, GRAWP, total, RoundX, RoundY, timestamp, Phase, Round, serverDataBase);
             killTableModel.teamCTname = killTableModel.team_CT[0].Clan;
             killTableModel.teamTname = killTableModel.team_T[0].Clan;
@@ -145,6 +144,11 @@ namespace CityInfo.API.Controllers
             counterServ.MergeModels(serverDataBase);
 
             return Ok(JsonConvert.SerializeObject(counterServ.economyTableModel));
+        }
+        [HttpPost("/player/{name}")]
+        public ActionResult PlayerProfile(string name)
+        {
+
         }
 
         [HttpGet("economyround")]

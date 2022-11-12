@@ -19,7 +19,7 @@ namespace CityInfo.API.Services.DatabaseServ
             {
                 count++;
             }
-            count = count - 9;
+            count = count - 10;
             return count;
         }
         public Deriv_PlayerTeam_BO GetPlayerTeamDerivObj(int i)
