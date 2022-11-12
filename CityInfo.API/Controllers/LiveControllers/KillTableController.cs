@@ -145,11 +145,11 @@ namespace CityInfo.API.Controllers
 
             return Ok(JsonConvert.SerializeObject(counterServ.economyTableModel));
         }
-        [HttpPost("/player/{name}")]
-        public ActionResult PlayerProfile(string name)
-        {
+        //[HttpPost("/player/{name}")]
+        //public ActionResult PlayerProfile(string name)
+        //{
 
-        }
+        //}
 
         [HttpGet("economyround")]
         public ActionResult EconomyRoundsDetails()
