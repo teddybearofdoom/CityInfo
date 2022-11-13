@@ -70,11 +70,6 @@ builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
 //Scoped - created once per request
 //Singleton - created first time they requested every subsequent request uses this instance
 
-#if DEBUG
-#else
-builder.Services.AddTransient<IMailService, CloudMailService>();
-#endif
-
 
 builder.Services.AddSingleton<CitiesDataStore>();
 
