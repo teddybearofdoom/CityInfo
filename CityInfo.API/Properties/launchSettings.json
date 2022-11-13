@@ -10,7 +10,7 @@
   },
   "profiles": {
     "CityInfo.API": {
-      "commandName": "Project",
+      //"commandName": "Project",
       //"launchBrowser": true,
       //"launchUrl": "swagger",
       "environmentVariables": {

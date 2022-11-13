@@ -29,10 +29,10 @@ namespace CityInfo.API.Controllers
         private ServerDataBase serverDataBase { get; set; }
         private string _configurationg { get; set; }
         private string _envName { get; set; }
-        
 
-        public KillTableController(string[] ConfigurationValue)
+        public KillTableController(string[] ConfigurationValue, ILogger<KillTableController> logger)
         {
+            _logger = logger;
             _envName = ConfigurationValue[0];
             _configurationg = ConfigurationValue[1];
             //_logger = logger;

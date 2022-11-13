@@ -51,6 +51,8 @@ string[] configs = { environmentName, ConfigurationValue };
 
 builder.Services.AddSingleton(configs);
 
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole(); 
 
 builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
 {
@@ -64,7 +66,7 @@ builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
 //Singleton - created first time they requested every subsequent request uses this instance
 
 
-builder.Services.AddSingleton<CitiesDataStore>();
+//builder.Services.AddSingleton<CitiesDataStore>();
 
 var app = builder.Build();
 
@@ -89,7 +91,7 @@ app.UseEndpoints(endpoints =>
 });
 //app.MapControllers();
 
-Console.WriteLine("#&)(*$)(#*$)(#*)$(#*()$*#)($ Elastic Banzai @)*@)(#*)@(#*)@(*#()@*#)@(");
+//Console.WriteLine("#&)(*$)(#*$)(#*)$(#*()$*#)($ Elastic Banzai @)*@)(#*)@(#*)@(*#()@*#)@(");
 
 app.Run();
 
