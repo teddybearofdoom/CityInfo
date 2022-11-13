@@ -69,11 +69,11 @@ builder.Services.AddSingleton<CitiesDataStore>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseSwagger();
+//    app.UseSwaggerUI();
+//}
 
 app.UseCors("corsapp");
 
@@ -89,4 +89,8 @@ app.UseEndpoints(endpoints =>
 });
 //app.MapControllers();
 
+Console.WriteLine("#&)(*$)(#*$)(#*)$(#*()$*#)($ Elastic Banzai @)*@)(#*)@(#*)@(*#()@*#)@(");
+
 app.Run();
+
+
