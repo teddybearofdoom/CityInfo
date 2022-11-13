@@ -36,9 +36,9 @@ namespace CityInfo.API.Controllers
             _envName = ConfigurationValue[0];
             _configurationg = ConfigurationValue[1];
             //_logger = logger;
-            mongoClient = new MongoClient(_configurationg);
+            mongoClient = new MongoClient(_envName);
             mongoDatabase = mongoClient.GetDatabase("astralis-vs-big-live");
-
+            
             serverDataBase = new ServerDataBase(mongoDatabase);
         }
         [HttpGet("hit")]

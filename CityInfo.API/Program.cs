@@ -91,7 +91,7 @@ app.UseEndpoints(endpoints =>
 });
 //app.MapControllers();
 
-//Console.WriteLine("#&)(*$)(#*$)(#*)$(#*()$*#)($ Elastic Banzai @)*@)(#*)@(#*)@(*#()@*#)@(");
+Console.WriteLine("#&)(*$)(#*$)(#*)$(#*()$*#)($ Elastic Banzai @)*@)(#*)@(#*)@(*#()@*#)@(");
 
 app.Run();
 
