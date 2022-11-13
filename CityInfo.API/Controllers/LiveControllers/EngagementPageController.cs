@@ -18,12 +18,15 @@ namespace CSGSI_Engine.Controllers
         private MongoClient mongoClient { get; set; }
         private IMongoDatabase mongoDatabase { get; set; }
         private ServerDataBase serverDataBase { get; set; }
-        public EngagementPageController(ILogger<EngagementPageController> logger)
+        private string _configurationg { get; set; }
+        private string _envName { get; set; }
+        public EngagementPageController(ILogger<EngagementPageController> logger, string[] ConfigurationValue)
         {
             _logger = logger;
 
-            mongoClient = new MongoClient("mongodb://127.0.0.1:27017");
-            mongoDatabase = mongoClient.GetDatabase("CSGSI-Nodes");
+            //mongoClient = new MongoClient("mongodb://127.0.0.1:27017");
+            mongoClient = new MongoClient(_configurationg);
+            mongoDatabase = mongoClient.GetDatabase("astralis-vs-big-m1-dust");
 
             serverDataBase = new ServerDataBase(mongoDatabase);
         }

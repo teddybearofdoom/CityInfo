@@ -50,6 +50,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
 
+var environmentName = Environment.GetEnvironmentVariable("MongoDBConnectionString");
+
+var ConfigurationValue = builder.Configuration["ConnectionStrings:MongoDBConnectionString"] ?? "Hello";
+
+string[] configs = { environmentName, ConfigurationValue };
+
+builder.Services.AddSingleton(configs);
+
+
 builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
 {
     builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();

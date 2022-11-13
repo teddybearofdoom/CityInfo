@@ -27,21 +27,34 @@ namespace CityInfo.API.Controllers
         private MongoClient mongoClient { get; set; }
         private IMongoDatabase mongoDatabase { get; set; }
         private ServerDataBase serverDataBase { get; set; }
+        private string _configurationg { get; set; }
+        private string _envName { get; set; }
+        
 
-        public KillTableController()
+        public KillTableController(string[] ConfigurationValue)
         {
+            _envName = ConfigurationValue[0];
+            _configurationg = ConfigurationValue[1];
             //_logger = logger;
-
-            mongoClient = new MongoClient("mongodb://127.0.0.1:27017");
-            mongoDatabase = mongoClient.GetDatabase("Astralis-vs-BIG-m1-dust");
+            mongoClient = new MongoClient(_configurationg);
+            mongoDatabase = mongoClient.GetDatabase("astralis-vs-big-live");
 
             serverDataBase = new ServerDataBase(mongoDatabase);
         }
         [HttpGet("hit")]
         public ActionResult test()
         {
-            return Ok("is working");
+            if(string.IsNullOrEmpty(_envName))
+            {
+                return Ok(_configurationg);
+            }
+            else
+            {
+                return Ok(_envName);
+            }
+            
         }
+
         [HttpGet("killTable/{FirstHalf}/{SecondHalf}/{FullTime}/{OT}/{FB}/{HB}/{Eco}/{GunRound}/{PartialGunRound}/{GRAWP}/{total}/{RoundX}/{RoundY}/{timestamp}/{Phase}/{Round}")]
         public ActionResult postKillTable(string FirstHalf, string SecondHalf, string FullTime, string OT, string FB, string HB, string Eco, string GunRound, string PartialGunRound, string GRAWP, string total, int RoundX, int RoundY, float timestamp, string Phase, int Round)
         {
