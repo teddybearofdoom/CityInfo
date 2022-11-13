@@ -4,13 +4,6 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
-//third party serilog logger configuration
-Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Debug()
-    .WriteTo.Console()
-    .WriteTo.File("logs/cityinfo.txt", rollingInterval: RollingInterval.Day)
-    .CreateLogger();
-
 
 var builder = WebApplication.CreateBuilder(args);
 
