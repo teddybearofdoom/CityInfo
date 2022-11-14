@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using CSGSI_FrontEnd.HistoricalDatabaseModels.EngagementModels;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,10 @@ namespace CSGO_GSI_Backend.Models.BusinessObjects.DerivBO
     /// </summary>
     public class Deriv_Engagement_BO
     {
+        public List<PlayersInfo> playersalive { get; set; }
+        public List<PlayersInfo> playersdead { get; set; }
+        public Deriv_Kill_BO Initiationkill { get; set; }
+        public List<Deriv_Kill_BO> KillsInEngagements { get; set; }
         public float startTime { get; set; }
         public string startPhase { get; set; }
         public float endTime { get; set; }
@@ -90,5 +95,12 @@ namespace CSGO_GSI_Backend.Models.BusinessObjects.DerivBO
         public bool versus_5v0 { get; set; }
         [BsonId]
         public ObjectId Id { get; set; }
+        public Deriv_Engagement_BO()
+        {
+            playersalive = new List<PlayersInfo>();
+            playersdead = new List<PlayersInfo>();
+            Initiationkill = new Deriv_Kill_BO();
+            KillsInEngagements = new List<Deriv_Kill_BO>();
+        }
     }
 }

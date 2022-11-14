@@ -8,7 +8,7 @@ namespace CSGSI_FrontEnd.FrontEndServices.UniqueKillServ
 {
     public class OpenerKillServ
     {
-        public void populateOpenerKillServ(List<Deriv_Kill_BO> deriv_Kill_BOs, TeamUniqueKillStats tradedOpeners, TeamUniqueKillStats untradedOpeners, CounterExpansionModel counterExpansionModel,ServerDataBase serverDataBase)
+        public void populateOpenerKillServ(List<Deriv_Kill_BO> deriv_Kill_BOs, CounterExpansionModel counterExpansionModel,ServerDataBase serverDataBase)
         {
             if (deriv_Kill_BOs.Count >= 1)
             {
@@ -18,19 +18,10 @@ namespace CSGSI_FrontEnd.FrontEndServices.UniqueKillServ
                     if (deriv_Kill_BOs[killIdx].victim_Player_Team == deriv_Kill_BOs[0].killing_Player_Team && Util.GetTimeDiff(deriv_Kill_BOs[0].phase, deriv_Kill_BOs[0].time, deriv_Kill_BOs[killIdx].phase, deriv_Kill_BOs[killIdx].time, deriv_Kill_BOs[0].round, serverDataBase) <= 5)
                     {
                         tradedFlag = true;
-
                     }
                 }
                 if (tradedFlag)
                 {
-                    if (deriv_Kill_BOs[0].killing_Player_Team == "CT")
-                    {
-                        tradedOpeners.teamCTTotal++;
-                    }
-                    if (deriv_Kill_BOs[0].killing_Player_Team == "T")
-                    {
-                        tradedOpeners.TeamTTotal++;
-                    }
                     foreach (var player in counterExpansionModel.teamAList)
                     {
                         if (player.name == deriv_Kill_BOs[0].killing_Player_Name)
@@ -48,14 +39,6 @@ namespace CSGSI_FrontEnd.FrontEndServices.UniqueKillServ
                 }
                 else
                 {
-                    if (deriv_Kill_BOs[0].killing_Player_Team == "CT")
-                    {
-                        untradedOpeners.teamCTTotal++;
-                    }
-                    if (deriv_Kill_BOs[0].killing_Player_Team == "T")
-                    {
-                        untradedOpeners.TeamTTotal++;
-                    }
                     foreach (var player in counterExpansionModel.teamAList)
                     {
                         if (player.name == deriv_Kill_BOs[0].killing_Player_Name)

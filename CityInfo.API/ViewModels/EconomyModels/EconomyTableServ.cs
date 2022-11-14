@@ -36,7 +36,8 @@ namespace CityInfo.API.ViewModels.EconomyModels
                     PopulateeconomyTable(secondDocument, firstdocument);
                 }
             }
-            var document = serverDataBase.GetPlayerTeamDerivObj(serverDataBase.GetTotalRoundCount() - 1);
+
+            var document = serverDataBase.GetPlayerTeamDerivObj(serverDataBase.GetTotalRoundCount());
             economyTable.teamCT.teamName = document.CTplayers[0].Clan;
             economyTable.teamT.teamName = document.Tplayers[0].Clan;
         }

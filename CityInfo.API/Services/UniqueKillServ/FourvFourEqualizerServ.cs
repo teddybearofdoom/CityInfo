@@ -8,7 +8,7 @@ namespace CSGSI_FrontEnd.FrontEndServices.UniqueKillServ
 {
     public class FourvFourEqualizerServ
     {
-        public void PopulateFourVFourServ(List<Deriv_Kill_BO> deriv_Kill_BOs, TeamUniqueKillStats fourVfourEqualizer, CounterExpansionModel counterExpansionModel, ServerDataBase serverDataBase)
+        public void PopulateFourVFourServ(List<Deriv_Kill_BO> deriv_Kill_BOs, CounterExpansionModel counterExpansionModel, ServerDataBase serverDataBase)
         {
             bool equalizerFlag = false;
             if (deriv_Kill_BOs.Count >= 2)
@@ -41,14 +41,6 @@ namespace CSGSI_FrontEnd.FrontEndServices.UniqueKillServ
             }
             if (equalizerFlag)
             {
-                if (deriv_Kill_BOs[1].killing_Player_Team == "CT")
-                {
-                    fourVfourEqualizer.teamCTTotal++;
-                }
-                if (deriv_Kill_BOs[1].killing_Player_Team == "T")
-                {
-                    fourVfourEqualizer.TeamTTotal++;
-                }
                 foreach (var player in counterExpansionModel.teamAList)
                 {
                     if (player.name == deriv_Kill_BOs[1].killing_Player_Name)

@@ -19,7 +19,7 @@ using System.Diagnostics;
 
 namespace CityInfo.API.Controllers
 {
-    [Route("api/livetables/")]
+    [Route("api/killtables/")]
     [ApiController]
     public class KillTableController : ControllerBase
     {
@@ -33,96 +33,97 @@ namespace CityInfo.API.Controllers
             //_logger = logger;
 
             mongoClient = new MongoClient("mongodb://127.0.0.1:27017");
-            mongoDatabase = mongoClient.GetDatabase("Astralis-vs-BIG-m1-dust");
+            mongoDatabase = mongoClient.GetDatabase("Astralis-vs-BIG");
 
             serverDataBase = new ServerDataBase(mongoDatabase);
         }
         [HttpGet("hit")]
-        public ActionResult test()
-        {
-            return Ok("is working");
-        }
-        [HttpGet("killTable/{FirstHalf}/{SecondHalf}/{FullTime}/{OT}/{FB}/{HB}/{Eco}/{GunRound}/{PartialGunRound}/{GRAWP}/{total}/{RoundX}/{RoundY}/{timestamp}/{Phase}/{Round}")]
-        public ActionResult postKillTable(string FirstHalf, string SecondHalf, string FullTime, string OT, string FB, string HB, string Eco, string GunRound, string PartialGunRound, string GRAWP, string total, int RoundX, int RoundY, float timestamp, string Phase, int Round)
-        {
-            ScoreBoardServ scoreBoardServ = new ScoreBoardServ();
+        //public ActionResult test()
+        //{
+        //    return Ok("is working");
+        //}
+        //[HttpGet("killTable/{FirstHalf}/{SecondHalf}/{FullTime}/{OT}/{FB}/{HB}/{Eco}/{GunRound}/{PartialGunRound}/{GRAWP}/{total}/{Phase}/{RoundX}/{RoundY}/{timestamp}/{Round}")]
+        //public ActionResult postKillTable(string FirstHalf, string SecondHalf, string FullTime, string OT, string FB, string HB, string Eco, string GunRound, string PartialGunRound, string GRAWP, string total, string Phase, int RoundX, int RoundY, float timestamp, int Round)
+        //{
+        //    ScoreBoardServ scoreBoardServ = new ScoreBoardServ();
 
-            KillTableModel killTableModel = scoreBoardServ.CheckScoreBoardFilters(FirstHalf, SecondHalf, FullTime, OT, FB, HB, Eco, GunRound, PartialGunRound, GRAWP, total, RoundX, RoundY, timestamp, Phase, Round, serverDataBase);
-            return Ok(JsonConvert.SerializeObject(killTableModel));
-        }
-        [HttpGet("homepage/{FH}/{SH}/{FT}/{ot}")]
-        public ActionResult postKillTable2(string FirstHalf, string SecondHalf, string FullTime, string OT, string FB, string HB, string Eco, string GunRound, string PartialGunRound, string GRAWP, string total, int RoundX, int RoundY, float timestamp, string Phase, int Round)
-        {
-            List<Deriv_PlayerTeam_BO> ListofRounds = new List<Deriv_PlayerTeam_BO>();
+        //    KillTableModel killTableModel = scoreBoardServ.CheckScoreBoardFilters(FirstHalf, SecondHalf, FullTime, OT, FB, HB, Eco, GunRound, PartialGunRound, GRAWP, total, RoundX, RoundY, timestamp, Phase, Round, serverDataBase);
+        //    return Ok(JsonConvert.SerializeObject(killTableModel));
+        //}
+        //[HttpPost("/ScoreBoard/{FirstHalf}/{SecondHalf}/{FullTime}/{OT}/{FB}/{HB}/{Eco}/{GunRound}/{PartialGunRound}/{GRAWP}/{total}/{Phase}/{RoundX}/{RoundY}/{timestamp}/{Round}")]
+        //public ActionResult ScoreBoard(string FirstHalf, string SecondHalf, string FullTime, string OT, string FB, string HB, string Eco, string GunRound, string PartialGunRound, string GRAWP, string total, int RoundX, int RoundY, float timestamp, string Phase, int Round)
+        //{
+        //    ScoreBoardServ scoreBoardServ = new ScoreBoardServ();
 
-            ScoreBoardServ scoreBoardServ = new ScoreBoardServ();
+        //    KillTableModel killTableModel = scoreBoardServ.CheckScoreBoardFilters(FirstHalf, SecondHalf, FullTime, OT, FB, HB, Eco, GunRound, PartialGunRound, GRAWP, total, RoundX, RoundY, timestamp, Phase, Round, serverDataBase);
+        //    return Ok(JsonConvert.SerializeObject(killTableModel));
+        //}
+        //[HttpGet("homepage/{FH}/{SH}/{FT}/{ot}")]
+        //public ActionResult postKillTable2(string FirstHalf, string SecondHalf, string FullTime, string OT, string FB, string HB, string Eco, string GunRound, string PartialGunRound, string GRAWP, string total, int RoundX, int RoundY, float timestamp, string Phase, int Round)
+        //{
+        //    List<Deriv_PlayerTeam_BO> ListofRounds = new List<Deriv_PlayerTeam_BO>();
 
-            KillTableModel killTableModel = scoreBoardServ.CheckScoreBoardFilters(FirstHalf, SecondHalf, FullTime, OT, FB, HB, Eco, GunRound, PartialGunRound, GRAWP, total, RoundX, RoundY, timestamp, Phase, Round, serverDataBase);
+        //    ScoreBoardServ scoreBoardServ = new ScoreBoardServ();
 
-            CounterServ counterServ = new CounterServ();
-            counterServ.SetFullTimeCounterTable(serverDataBase);
+        //    KillTableModel killTableModel = scoreBoardServ.CheckScoreBoardFilters(FirstHalf, SecondHalf, FullTime, OT, FB, HB, Eco, GunRound, PartialGunRound, GRAWP, total, RoundX, RoundY, timestamp, Phase, Round, serverDataBase);
 
-            CounterExpansionServ counterExpansionServ = new CounterExpansionServ();
-            counterExpansionServ.SetFullTimeCounterExpansionTable(serverDataBase);
+        //    CounterServ counterServ = new CounterServ();
+        //    counterServ.SetFullTimeCounterTable(serverDataBase);
 
-            MergeKillPageModels mergeKillPageModels = new MergeKillPageModels();
+        //    CounterExpansionServ counterExpansionServ = new CounterExpansionServ();
+        //    counterExpansionServ.SetFullTimeCounterExpansionTable(serverDataBase);
 
-            return Ok(JsonConvert.SerializeObject(mergeKillPageModels.MergeBasicPageModels(killTableModel, counterServ.economyTableModel, counterServ.uniqueKillStatsModel, counterExpansionServ.counterExpansionModel)));
-        }
-        [HttpPost("/counterexpansion")]
-        public ActionResult CounterExpansionTable()
-        {
-            string FirstHalf = null;
-            string SecondHalf = null;
-            string FullTime = null;
-            string OT = null;
-            int totalRound = serverDataBase.GetTotalRoundCount();
-            CounterExpansionServ counterExpansionServ = new CounterExpansionServ(FirstHalf, SecondHalf, FullTime, OT, totalRound);
-            counterExpansionServ.CheckFiltersCounterExpansionTable(serverDataBase);
-            return Ok(JsonConvert.SerializeObject(counterExpansionServ.counterExpansionModel));
-        }
-        [HttpPost("/killcountertable")]
-        public ActionResult KillCounterTable()
-        {
-            CounterServ counterServ = new CounterServ();
-            counterServ.SetFullTimeCounterTable(serverDataBase);
-            counterServ.uniqueKillStatsModel.teamCT = "Astralis";
-            counterServ.uniqueKillStatsModel.teamT = "BIG";
-            return Ok(counterServ.uniqueKillStatsModel);
-        }
-        [HttpPost("/economy")]
-        public ActionResult economy()
-        {
-            EconomyTableServ economyTableServ = new EconomyTableServ();
-            economyTableServ.SetEcononmyTable(serverDataBase);
+        //    MergeKillPageModels mergeKillPageModels = new MergeKillPageModels();
 
-            return Ok(JsonConvert.SerializeObject(economyTableServ.economyTable));
-        }
-        [HttpPost("/killtable")]
-        public ActionResult KillTable()
-        {
-            string FirstHalf = null;
-            string SecondHalf = null;
-            string FullTime = "on";
-            string OT = null;
-            string FB = null; string HB = null;
-            string Eco = null;
-            string GunRound = null;
-            string PartialGunRound = null;
-            string GRAWP = null;
-            string total = null;
-            int RoundX = 0;
-            int RoundY = 0;
-            float timestamp = 0;
-            string Phase = null;
-            int Round = 0;
-            ScoreBoardServ scoreBoardServ = new ScoreBoardServ();
+        //    return Ok(JsonConvert.SerializeObject(mergeKillPageModels.MergeBasicPageModels(killTableModel, counterServ.economyTableModel, counterServ.uniqueKillStatsModel, counterExpansionServ.counterExpansionModel)));
+        //}
+        //[HttpPost("/counterexpansion")]
+        //public ActionResult CounterExpansionTable()
+        //{
+        //    string FirstHalf = null;
+        //    string SecondHalf = null;
+        //    string FullTime = null;
+        //    string OT = null;
+        //    int totalRound = serverDataBase.GetTotalRoundCount();
+        //    CounterExpansionServ counterExpansionServ = new CounterExpansionServ(FirstHalf, SecondHalf, FullTime, OT, totalRound);
+        //    counterExpansionServ.CheckFiltersCounterExpansionTable(serverDataBase);
+        //    return Ok(JsonConvert.SerializeObject(counterExpansionServ.counterExpansionModel));
+        //}
+        //[HttpPost("/killcountertable")]
+        //public ActionResult KillCounterTable()
+        //{
+        //    CounterServ counterServ = new CounterServ();
+        //    counterServ.SetFullTimeCounterTable(serverDataBase);
+        //    counterServ.uniqueKillStatsModel.teamCT = "Astralis";
+        //    counterServ.uniqueKillStatsModel.teamT = "BIG";
+        //    return Ok(counterServ.uniqueKillStatsModel);
+        //}
 
-            KillTableModel killTableModel = scoreBoardServ.CheckScoreBoardFilters(FirstHalf, SecondHalf, FullTime, OT, FB, HB, Eco, GunRound, PartialGunRound, GRAWP, total, RoundX, RoundY, timestamp, Phase, Round, serverDataBase);
-            killTableModel.teamCTname = killTableModel.team_CT[0].Clan;
-            killTableModel.teamTname = killTableModel.team_T[0].Clan;
-            return Ok(JsonConvert.SerializeObject(killTableModel));
-        }
+        //[HttpPost("/killtable")]
+        //public ActionResult KillTable()
+        //{
+        //    string FirstHalf = null;
+        //    string SecondHalf = null;
+        //    string FullTime = "on";
+        //    string OT = null;
+        //    string FB = null; string HB = null;
+        //    string Eco = null;
+        //    string GunRound = null;
+        //    string PartialGunRound = null;
+        //    string GRAWP = null;
+        //    string total = null;
+        //    int RoundX = 0;
+        //    int RoundY = 0;
+        //    float timestamp = 0;
+        //    string Phase = null;
+        //    int Round = 0;
+        //    ScoreBoardServ scoreBoardServ = new ScoreBoardServ();
+
+        //    KillTableModel killTableModel = scoreBoardServ.CheckScoreBoardFilters(FirstHalf, SecondHalf, FullTime, OT, FB, HB, Eco, GunRound, PartialGunRound, GRAWP, total, RoundX, RoundY, timestamp, Phase, Round, serverDataBase);
+        //    killTableModel.teamCTname = killTableModel.team_CT[0].Clan;
+        //    killTableModel.teamTname = killTableModel.team_T[0].Clan;
+        //    return Ok(JsonConvert.SerializeObject(killTableModel));
+        //}
         [HttpPost("/engagementtable")]
         public ActionResult engagementtable()
         {

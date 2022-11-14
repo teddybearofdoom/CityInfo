@@ -8,21 +8,12 @@ namespace CSGSI_FrontEnd.FrontEndServices.UniqueKillServ
 {
     public class FollowupFragServ
     {
-        public void PopulateFollowUpFrag(List<Deriv_Kill_BO> deriv_Kill_BOs, TeamUniqueKillStats followUpFragsUT, TeamUniqueKillStats followUpFragsTo, CounterExpansionModel counterExpansionModel, ServerDataBase serverDataBase)
+        public void PopulateFollowUpFrag(List<Deriv_Kill_BO> deriv_Kill_BOs, CounterExpansionModel counterExpansionModel, ServerDataBase serverDataBase)
         {
             if (deriv_Kill_BOs.Count >= 2)
             {
                 if (deriv_Kill_BOs[0].killing_Player_Team == deriv_Kill_BOs[1].killing_Player_Team)
                 {
-                    //FuF To
-                    if (deriv_Kill_BOs[1].killing_Player_Team == "CT")
-                    {
-                        followUpFragsTo.teamCTTotal++;
-                    }
-                    if (deriv_Kill_BOs[1].killing_Player_Team == "T")
-                    {
-                        followUpFragsTo.TeamTTotal++;
-                    }
                     foreach (var player in counterExpansionModel.teamAList)
                     {
                         if (player.name == deriv_Kill_BOs[1].killing_Player_Name)
@@ -48,14 +39,6 @@ namespace CSGSI_FrontEnd.FrontEndServices.UniqueKillServ
                     }
                     if (fufUT)
                     {
-                        if (deriv_Kill_BOs[1].killing_Player_Team == "CT")
-                        {
-                            followUpFragsUT.teamCTTotal++;
-                        }
-                        if (deriv_Kill_BOs[1].killing_Player_Team == "T")
-                        {
-                            followUpFragsUT.TeamTTotal++;
-                        }
                         foreach (var player in counterExpansionModel.teamAList)
                         {
                             if (player.name == deriv_Kill_BOs[1].killing_Player_Name)

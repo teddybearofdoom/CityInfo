@@ -25,7 +25,6 @@ namespace CityInfo.API.Services.UniqueKillServ
         }
         public void PopulateFirstResponseKillServ(List<Deriv_Kill_BO> deriv_Kill_BOs, CounterExpansionModel counterExpansionModel)
         {
-
             if (deriv_Kill_BOs.Count >= 2)
             {
                 if (deriv_Kill_BOs[1].killing_Player_Team == deriv_Kill_BOs[0].victim_Player_Team)

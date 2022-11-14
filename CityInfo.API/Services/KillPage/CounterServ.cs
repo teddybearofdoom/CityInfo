@@ -37,14 +37,12 @@ namespace CityInfo.API.Services.KillPage
         {
             for (int i = 0; i < totalRoundCount; i++)
             {
-                if (i == 15)
+                if (i == 15) 
                 {
                     counterTable.SwitchEconomyTableModelValues(economyTableModel);
                     counterTable.SwitchUniqueKillTableValues(uniqueKillStatsModel);
                 }
-
                 counterTable.PopulateCounterTableService(serverDataBase, uniqueKillStatsModel, economyTableModel, i);
-
                 Console.WriteLine("Round" + i);
             }
         }
